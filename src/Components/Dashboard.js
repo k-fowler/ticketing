@@ -42,14 +42,14 @@ const Dashboard = () => {
           {' '}
           <Card
             title="Tickets by priority"
-            extra={<a href="#">View tickets</a>}
+            extra={<a href="/#">View tickets</a>}
           >
             <CustomBarChart data={data} />
           </Card>
         </Col>
         <Col span={12}>
           {' '}
-          <Card title="Tickets by type" extra={<a href="#">View tickets</a>}>
+          <Card title="Tickets by type" extra={<a href="/#">View tickets</a>}>
             <CustomPieChart data={data01} />
           </Card>
         </Col>
@@ -59,7 +59,7 @@ const Dashboard = () => {
           {' '}
           <Card
             title="Tickets by priority"
-            extra={<a href="#">View tickets</a>}
+            extra={<a href="/#">View tickets</a>}
           >
             <CustomBarChart data={data} />
           </Card>
@@ -68,7 +68,7 @@ const Dashboard = () => {
           {' '}
           <Card
             title="Tickets by priority"
-            extra={<a href="#">View tickets</a>}
+            extra={<a href="/#">View tickets</a>}
           >
             <CustomPieChart data={data01} />
           </Card>

@@ -1,14 +1,5 @@
 import React from 'react';
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  PieChart,
-  Pie,
-} from 'recharts';
+import { Tooltip, PieChart, Pie } from 'recharts';
 
 const CustomPieChart = ({ data }) => {
   return (

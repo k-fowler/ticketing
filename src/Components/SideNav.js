@@ -16,10 +16,16 @@ const SideNav = () => {
         <Menu.Item>
           <Link to="/tickets">My tickets</Link>
         </Menu.Item>
-        <Menu.Item>My projects</Menu.Item>
+        <Menu.Item>
+          <Link to="/projects">My projects</Link>
+        </Menu.Item>
         <SubMenu key="sub1" title="Admin panel">
-          <Menu.Item>Manage user role assignment</Menu.Item>
-          <Menu.Item>Manage users assigned to project</Menu.Item>
+          <Menu.Item>
+            <Link to="/roleassign">Manage user roles</Link>
+          </Menu.Item>
+          <Menu.Item>
+            <Link to="/projectassign">Manage project users</Link>
+          </Menu.Item>
         </SubMenu>
       </Menu>
     </Sider>
