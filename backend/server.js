@@ -1,10 +1,17 @@
 const express = require('express');
 const dotenv = require('dotenv');
+const cors = require('cors');
 
 // Load env vars
 dotenv.config({ path: './config/config.env' });
 
 const app = express();
+
+app.use(cors());
+
+app.get('/', (req, res) => {
+  res.send('Hello from express');
+});
 
 const PORT = process.env.PORT || 5000;
 
