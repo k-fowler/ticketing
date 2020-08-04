@@ -1,6 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
+const errorHandler = require('./middleware/error');
 const connectDB = require('./config/db');
 const cors = require('cors');
 
@@ -25,6 +26,8 @@ if (process.env.NODE_ENV === 'development') {
 
 //Mount routers
 app.use('/api/v1/projects', projects);
+
+app.use(errorHandler);
 
 app.use(cors());
 
