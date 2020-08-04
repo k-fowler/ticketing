@@ -15,6 +15,9 @@ const projects = require('./routes/projects');
 
 const app = express();
 
+// Body parser
+app.use(express.json());
+
 //Dev logging middleware
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
@@ -36,5 +39,5 @@ const server = app.listen(
 process.on('unhandledRejection', (err, promise) => {
   console.log(`Error ${err.message}`);
   // Close server & exit process
-  server.close(() => process(1));
+  server.close(() => process.exit(1));
 });
