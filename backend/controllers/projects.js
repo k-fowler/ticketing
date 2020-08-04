@@ -11,7 +11,7 @@ exports.getProjects = (req, res, next) => {
 exports.getProject = (req, res, next) => {
   res
     .status(200)
-    .json({ success: true, msg: `Show a single bootcamp ${req.params.id}` });
+    .json({ success: true, msg: `Show a single project ${req.params.id}` });
 };
 
 // @desc Create new project
