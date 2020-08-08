@@ -4,6 +4,7 @@ const Ticket = require('../models/Ticket');
 
 // @desc Get tickets
 // @route GET /api/v1/tickets
+// @route GET /api/v1/tickets/:userId
 // @route GET /api/v1/projects/:projectId/tickets
 // @access Private
 exports.getTickets = asyncHandler(async (req, res, next) => {
@@ -11,6 +12,8 @@ exports.getTickets = asyncHandler(async (req, res, next) => {
 
   if (req.params.projectId) {
     query = Ticket.find({ project: req.params.projectId });
+  } else if (req.params.userId) {
+    query = Ticket.find({ submitter: req.params.userId });
   } else {
     query = Ticket.find();
   }

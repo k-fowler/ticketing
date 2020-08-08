@@ -38,6 +38,11 @@ const TicketSchema = new mongoose.Schema({
     ref: 'Project',
     required: true,
   },
+  submitter: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'User',
+    required: true,
+  },
 });
 
 module.exports = mongoose.model('Ticket', TicketSchema);
