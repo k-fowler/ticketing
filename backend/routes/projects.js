@@ -7,7 +7,13 @@ const {
   deleteProject,
 } = require('../controllers/projects');
 
+// Include other resource routers
+const ticketRouter = require('./tickets');
+
 const router = express.Router();
+
+// Reroute into other resource routers
+router.use('/:projectId/tickets', ticketRouter);
 
 const { protect, authorize } = require('../middleware/auth');
 

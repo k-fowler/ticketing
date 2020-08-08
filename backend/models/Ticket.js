@@ -22,8 +22,9 @@ const TicketSchema = new mongoose.Schema({
     enum: ['Open', 'In progress', 'Resolved'],
     default: 'open',
   },
-  status: {
+  type: {
     type: String,
+    required: [true, 'Please set the ticket type'],
     enum: [
       'Bugs/Errors',
       'Feature requests',
