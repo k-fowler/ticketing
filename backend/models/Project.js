@@ -15,6 +15,11 @@ const ProjectSchema = new mongoose.Schema({
     required: [true, 'Please add a description'],
     maxlength: [500, 'Description cannot exceed 500 characters'],
   },
+  user: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'User',
+    required: true,
+  },
 });
 
 // Create project slug from the name

@@ -9,7 +9,7 @@ const {
 
 const router = express.Router();
 
-const { protect } = require('../middleware/auth');
+const { protect, authorize } = require('../middleware/auth');
 
 router.route('/').get(protect, getProjects).post(protect, createProject);
 
@@ -17,6 +17,6 @@ router
   .route('/:id')
   .get(protect, getProject)
   .put(protect, updateProject)
-  .delete(protect, deleteProject);
+  .delete(protect, authorize('projectManager', 'admin'), deleteProject);
 
 module.exports = router;
