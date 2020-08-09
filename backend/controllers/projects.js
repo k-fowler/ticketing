@@ -6,7 +6,7 @@ const Project = require('../models/Project');
 // @route GET /api/v1/projects
 // @access Private
 exports.getProjects = asyncHandler(async (req, res, next) => {
-  const projects = await Project.find();
+  const projects = await Project.find().populate('tickets');
   res.status(200).json({
     success: true,
     count: projects.length,
@@ -38,7 +38,7 @@ exports.getProject = asyncHandler(async (req, res, next) => {
 exports.createProject = asyncHandler(async (req, res, next) => {
   // Add user to req.body
   req.body.user = req.user.id;
-
+  console.log(req.body);
   const project = await Project.create(req.body);
 
   res.status(201).json({
@@ -63,7 +63,7 @@ exports.updateProject = asyncHandler(async (req, res, next) => {
   if (project.user.toString() !== req.user.id && req.user.role !== 'admin') {
     return next(
       new ErrorResponse(
-        `User ${req.params.id} is not authorized to update this project`,
+        `User ${req.user.id} is not authorized to update this project`,
         401
       )
     );
