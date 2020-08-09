@@ -65,3 +65,21 @@ exports.addTicket = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({ sucess: true, data: ticket });
 });
+
+// @desc Update ticket
+// @route PUT /api/v1/projects/:id
+// @access Private
+exports.updateTicket = asyncHandler(async (req, res, next) => {
+  let ticket = await Ticket.findById(req.params.id);
+
+  if (!ticket) {
+    next(new ErrorResponse(`No ticket with id of ${req.params.id}`), 404);
+  }
+
+  ticket = await Ticket.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+  });
+
+  res.status(200).json({ sucess: true, data: ticket });
+});
