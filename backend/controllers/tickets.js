@@ -48,8 +48,6 @@ exports.getTickets = asyncHandler(async (req, res, next) => {
 // @access Private
 exports.addTicket = asyncHandler(async (req, res, next) => {
   req.body.project = req.params.projectId;
-
-  // Add submitter to req.body
   req.body.submitter = req.user.id;
 
   const project = await Project.findById(req.params.projectId);
@@ -82,4 +80,19 @@ exports.updateTicket = asyncHandler(async (req, res, next) => {
   });
 
   res.status(200).json({ sucess: true, data: ticket });
+});
+
+// @desc Detele ticket
+// @route DELETE /api/v1/projects/:id
+// @access Private
+exports.deleteTicket = asyncHandler(async (req, res, next) => {
+  const ticket = await Ticket.findById(req.params.id);
+
+  if (!ticket) {
+    next(new ErrorResponse(`No ticket with id of ${req.params.id}`), 404);
+  }
+
+  await ticket.remove();
+
+  res.status(200).json({ sucess: true, data: {} });
 });
