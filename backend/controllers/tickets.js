@@ -1,3 +1,4 @@
+const path = require('path');
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
 const Ticket = require('../models/Ticket');
@@ -107,4 +108,51 @@ exports.deleteTicket = asyncHandler(async (req, res, next) => {
   await ticket.remove();
 
   res.status(200).json({ sucess: true, data: {} });
+});
+
+// @desc    Upload file for ticket
+// @route   PUT /api/v1/tickets/:id/file
+// @access  Private
+exports.ticketFileUpload = asyncHandler(async (req, res, next) => {
+  const ticket = await Ticket.findById(req.params.id);
+
+  if (!ticket) {
+    return next(
+      new ErrorResponse(`No ticket with id of ${req.params.id}`, 404)
+    );
+  }
+
+  if (!req.files) {
+    return next(new ErrorResponse('Please upload a file', 404));
+  }
+
+  const file = req.files.file;
+
+  // Make sure file is a photo
+  if (!file.mimetype.startsWith('image')) {
+    return next(new ErrorResponse('Please upload an image file'));
+  }
+
+  // Check filesize
+  if (file.size > process.env.MAX_FILE_UPLOAD) {
+    return next(
+      new ErrorResponse(
+        `Please upload a file less than ${process.env.MAX_FILE_UPLOAD}`
+      )
+    );
+  }
+
+  // Create custom filename
+  file.name = `file_${ticket._id}${path.parse(file.name).ext}`;
+
+  file.mv(`${process.env.FILE_UPLOAD_PATH}/${file.name}`, async (err) => {
+    if (err) {
+      console.error(err);
+      return next(new ErrorResponse('Problem with file upload', 500));
+    }
+
+    await Ticket.findByIdAndUpdate(req.params.id, { file: file.name });
+
+    res.status(200).json({ sucess: true, data: file.name });
+  });
 });

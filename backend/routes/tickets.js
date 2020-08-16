@@ -5,6 +5,7 @@ const {
   addTicket,
   updateTicket,
   deleteTicket,
+  ticketFileUpload,
 } = require('../controllers/tickets');
 
 // Include other resource routers
@@ -24,5 +25,7 @@ router
   .put(protect, updateTicket)
   .delete(protect, deleteTicket);
 //router.route('/:userId').get(getTickets);
+
+router.route('/:id/file').put(ticketFileUpload);
 
 module.exports = router;

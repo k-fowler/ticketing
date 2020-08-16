@@ -33,6 +33,10 @@ const TicketSchema = new mongoose.Schema(
         'Other comments',
       ],
     },
+    file: {
+      type: String,
+      default: 'no-file',
+    },
     createdAt: { type: Date, default: Date.now },
     project: {
       type: mongoose.Schema.ObjectId,
