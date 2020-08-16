@@ -7,7 +7,13 @@ const {
   deleteTicket,
 } = require('../controllers/tickets');
 
+// Include other resource routers
+const commentRouter = require('./comments');
+
 const router = express.Router({ mergeParams: true });
+
+// Reroute into other resource routers
+router.use('/:ticketId/comments', commentRouter);
 
 const { protect } = require('../middleware/auth');
 

@@ -15,6 +15,7 @@ connectDB();
 // Route files
 const projects = require('./routes/projects');
 const tickets = require('./routes/tickets');
+const comments = require('./routes/comments');
 const auth = require('./routes/auth');
 
 const app = express();
@@ -33,6 +34,7 @@ if (process.env.NODE_ENV === 'development') {
 //Mount routers
 app.use('/api/v1/projects', projects);
 app.use('/api/v1/tickets', tickets);
+app.use('/api/v1/comments', comments);
 app.use('/api/v1/auth', auth);
 
 app.use(errorHandler);

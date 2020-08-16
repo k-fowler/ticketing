@@ -7,10 +7,12 @@ const Project = require('../models/Project');
 // @route GET /api/v1/tickets/:id
 // @access Private
 exports.getTicket = asyncHandler(async (req, res, next) => {
-  const ticket = await (await Ticket.findById(req.params.id)).populate({
-    path: 'project',
-    select: 'name description',
-  });
+  const ticket = await Ticket.findById(req.params.id)
+    .populate({
+      path: 'project',
+      select: 'name description',
+    })
+    .populate('comments');
 
   if (!ticket) {
     next(new ErrorResponse(`No ticket with id of ${req.params.id}`), 404);

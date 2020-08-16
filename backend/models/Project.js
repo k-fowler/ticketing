@@ -37,6 +37,11 @@ ProjectSchema.pre('save', function (next) {
 // Cascade delete tickets when a project is deleted
 ProjectSchema.pre('remove', async function (next) {
   console.log(`Tickets being removed from project ${this._id}`);
+  const tickets = await this.model('Ticket').find({ project: this._id });
+  console.log(tickets);
+  for (let i = 0; i < tickets.length; i++) {
+    await this.model('Comment').deleteMany({ ticket: tickets[i]._id });
+  }
   await this.model('Ticket').deleteMany({ project: this._id });
   next();
 });
