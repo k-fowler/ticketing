@@ -11,8 +11,12 @@ const router = express.Router({ mergeParams: true });
 
 const { protect, authorize } = require('../middleware/auth');
 
-router.route('/').get(getComments).post(protect, addComment);
+router.route('/').get(protect, getComments).post(protect, addComment);
 
-router.route('/:id').get(getComment).put(updateComment).delete(deleteComment);
+router
+  .route('/:id')
+  .get(protect, getComment)
+  .put(protect, updateComment)
+  .delete(protect, deleteComment);
 
 module.exports = router;

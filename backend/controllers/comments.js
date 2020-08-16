@@ -64,6 +64,16 @@ exports.updateComment = asyncHandler(async (req, res, next) => {
     next(new ErrorResponse(`No comment with id of ${req.params.id}`), 404);
   }
 
+  // Make sure user is comment owner or admin
+  if (comment.user.toString() !== req.user.id && req.user.role !== 'admin') {
+    return next(
+      new ErrorResponse(
+        `User ${req.params.id} is not authorized to delete this comment`,
+        401
+      )
+    );
+  }
+
   comment = await Comment.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,
@@ -80,6 +90,16 @@ exports.deleteComment = asyncHandler(async (req, res, next) => {
 
   if (!comment) {
     next(new ErrorResponse(`No comment with id of ${req.params.id}`), 404);
+  }
+
+  // Make sure user is comment owner or admin
+  if (comment.user.toString() !== req.user.id && req.user.role !== 'admin') {
+    return next(
+      new ErrorResponse(
+        `User ${req.params.id} is not authorized to delete this comment`,
+        401
+      )
+    );
   }
 
   await comment.remove();

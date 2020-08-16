@@ -23,7 +23,6 @@ exports.getTicket = asyncHandler(async (req, res, next) => {
 
 // @desc Get tickets
 // @route GET /api/v1/tickets
-// @route GET /api/v1/tickets/:userId
 // @route GET /api/v1/projects/:projectId/tickets
 // @access Private
 exports.getTickets = asyncHandler(async (req, res, next) => {
@@ -31,8 +30,6 @@ exports.getTickets = asyncHandler(async (req, res, next) => {
 
   if (req.params.projectId) {
     query = Ticket.find({ project: req.params.projectId });
-  } else if (req.params.userId) {
-    query = Ticket.find({ submitter: req.params.userId });
   } else {
     query = Ticket.find().populate({
       path: 'project',
@@ -92,6 +89,19 @@ exports.deleteTicket = asyncHandler(async (req, res, next) => {
 
   if (!ticket) {
     next(new ErrorResponse(`No ticket with id of ${req.params.id}`), 404);
+  }
+
+  // Make sure user is ticket owner or admin
+  if (
+    ticket.submitter.toString() !== req.user.id &&
+    req.user.role !== 'admin'
+  ) {
+    return next(
+      new ErrorResponse(
+        `User ${req.params.id} is not authorized to delete this ticket`,
+        401
+      )
+    );
   }
 
   await ticket.remove();
