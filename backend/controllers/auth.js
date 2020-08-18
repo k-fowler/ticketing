@@ -61,6 +61,21 @@ exports.getMe = asyncHandler(async (req, res, next) => {
   });
 });
 
+// @desc    Log user out / clear cookie
+// @route   GET /api/v1/auth/logout
+// @access  Private
+exports.logout = asyncHandler(async (req, res, next) => {
+  res.cookie('token', 'none', {
+    expires: new Date(Date.now() + 10 * 1000),
+    httpOnly: true,
+  });
+
+  res.status(200).json({
+    sucess: true,
+    data: {},
+  });
+});
+
 // @desc    Update user details
 // @route   PUT /api/v1/auth/updatedetails
 // @access  Private
@@ -93,6 +108,34 @@ exports.updatePassword = asyncHandler(async (req, res, next) => {
   }
 
   user.password = req.body.newPassword;
+  await user.save();
+
+  sendTokenResponse(user, 200, res);
+});
+
+// @desc    Reset password
+// @route   PUT /api/v1/auth/resetpassword/:resettoken
+// @access  Public
+exports.resetPassword = asyncHandler(async (req, res, next) => {
+  // Get hashed token
+  const resetPasswordToken = crypto
+    .createHash('sha256')
+    .update(req.params.resettoken)
+    .digest('hex');
+
+  const user = await User.findOne({
+    resetPasswordToken,
+    resetPasswordExpire: { $gt: Date.now() },
+  });
+
+  if (!user) {
+    return next(new ErrorResponse('Invalid token', 400));
+  }
+
+  // Set new password
+  user.password = req.body.password;
+  user.resetPasswordToken = undefined;
+  user.resetPasswordExpire = undefined;
   await user.save();
 
   sendTokenResponse(user, 200, res);
@@ -165,31 +208,3 @@ const sendTokenResponse = (user, statusCode, res) => {
     token,
   });
 };
-
-// @desc    Reset password
-// @route   PUT /api/v1/auth/resetpassword/:resettoken
-// @access  Public
-exports.resetPassword = asyncHandler(async (req, res, next) => {
-  // Get hashed token
-  const resetPasswordToken = crypto
-    .createHash('sha256')
-    .update(req.params.resettoken)
-    .digest('hex');
-
-  const user = await User.findOne({
-    resetPasswordToken,
-    resetPasswordExpire: { $gt: Date.now() },
-  });
-
-  if (!user) {
-    return next(new ErrorResponse('Invalid token', 400));
-  }
-
-  // Set new password
-  user.password = req.body.password;
-  user.resetPasswordToken = undefined;
-  user.resetPasswordExpire = undefined;
-  await user.save();
-
-  sendTokenResponse(user, 200, res);
-});
