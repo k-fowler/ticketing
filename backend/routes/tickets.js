@@ -16,7 +16,7 @@ const router = express.Router({ mergeParams: true });
 // Reroute into other resource routers
 router.use('/:ticketId/comments', commentRouter);
 
-const { protect } = require('../middleware/auth');
+const { protect, authorize } = require('../middleware/auth');
 
 router.route('/').get(protect, getTickets).post(protect, addTicket);
 router

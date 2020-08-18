@@ -19,6 +19,7 @@ const projects = require('./routes/projects');
 const tickets = require('./routes/tickets');
 const comments = require('./routes/comments');
 const auth = require('./routes/auth');
+const users = require('./routes/users');
 
 const app = express();
 
@@ -44,6 +45,7 @@ app.use('/api/v1/projects', projects);
 app.use('/api/v1/tickets', tickets);
 app.use('/api/v1/comments', comments);
 app.use('/api/v1/auth', auth);
+app.use('/api/v1/users', users);
 
 app.use(errorHandler);
 
