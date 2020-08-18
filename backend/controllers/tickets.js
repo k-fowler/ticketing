@@ -31,6 +31,10 @@ exports.getTickets = asyncHandler(async (req, res, next) => {
 
   if (req.params.projectId) {
     query = Ticket.find({ project: req.params.projectId });
+  } else if (req.baseUrl.endsWith('ticketssubmitted')) {
+    query = Ticket.find({ submitter: req.params.userId });
+  } else if (req.baseUrl.endsWith('ticketsassigned')) {
+    query = Ticket.find({ assigned: req.params.userId });
   } else {
     query = Ticket.find().populate({
       path: 'project',

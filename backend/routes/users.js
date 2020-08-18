@@ -7,9 +7,14 @@ const {
   deleteUser,
 } = require('../controllers/users');
 
-const User = require('../models/User');
+// Include other resource routers
+const ticketRouter = require('./tickets');
 
 const router = express.Router({ mergeParams: true });
+
+// Reroute into other resource routers
+router.use('/:userId/ticketssubmitted', ticketRouter);
+router.use('/:userId/ticketsassigned', ticketRouter);
 
 const { protect, authorize } = require('../middleware/auth');
 

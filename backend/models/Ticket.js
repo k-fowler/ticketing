@@ -48,6 +48,10 @@ const TicketSchema = new mongoose.Schema(
       ref: 'User',
       required: true,
     },
+    assigned: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'User',
+    },
   },
   {
     toJSON: { virtuals: true },
