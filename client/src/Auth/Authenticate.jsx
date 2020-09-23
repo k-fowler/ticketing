@@ -1,10 +1,7 @@
 import React from 'react';
 
 import api from 'shared/utils/api';
-import { getStoredAuthToken, removeStoredAuthToken, storeAuthToken } from 'shared/utils/authToken';
-
-const token =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmMmViNGFjZmFkNjM3MDg2NTZjODA3NCIsImlhdCI6MTU5OTc0MDAwNCwiZXhwIjoxNjAyMzMyMDA0fQ.4IA8HeUhGVoDnQvLzWhaMRzrXJcb_o_H2H1kKx0M3tcx';
+import { removeStoredAuthToken, storeAuthToken } from 'shared/utils/authToken';
 
 const AuthContext = React.createContext([{}, function () {}]);
 
@@ -15,16 +12,7 @@ function AuthProvider({ children }) {
     user: null,
   });
 
-  const setLoggedInState = () => {
-    stateAndSetState[1]({
-      status: 'success',
-      error: null,
-      user: 'User created by setLoggedInState',
-    });
-  };
-
   React.useEffect(() => {
-    //storeAuthToken(token);
     getCurrentUser().then(
       (data) => {
         stateAndSetState[1]({ status: 'success', error: null, user: data.data });
@@ -54,15 +42,24 @@ function useAuthState() {
   };
 }
 
-const loginUser = async (email, password) => {
-  const state = React.useContext(AuthContext);
-  const userData = {
-    email,
-    password,
-  };
-  const { token } = await api.post('/api/v1/auth/login', userData);
-  storeAuthToken(token);
-  return token;
+const loginUser = async (userData) => {
+  let response = {};
+  try {
+    const { token } = await api.post('/api/v1/auth/login', userData);
+    storeAuthToken(token);
+    response = {
+      status: 'success',
+      error: null,
+      token,
+    };
+  } catch (error) {
+    response = {
+      status: 'error',
+      error,
+      token: null,
+    };
+  }
+  return response;
 };
 
 const getCurrentUser = async () => {

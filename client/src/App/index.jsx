@@ -5,6 +5,8 @@ import PageLoader from 'shared/components/PageLoader';
 const AuthenticatedApp = React.lazy(() => import('AuthenticatedApp'));
 const UnauthenticatedApp = React.lazy(() => import('UnauthenticatedApp'));
 
+import './styles.css';
+
 const App = () => {
   return (
     <AuthProvider>
